@@ -9,6 +9,7 @@
     "ci": "yarn check && yarn lint:js && yarn test",
     "clean": "rm -rf dist",
     "precommit": "lint-staged && yarn lint",
+    "deploy": "yarn run package-functions && firebase deploy",
     "eslint-check": "eslint --print-config .eslintrc | eslint-config-prettier-check",
     "format:js": "prettier --single-quote --trailing-comma all --no-semi --print-width 180 --write \"{src,test}/**/*.js\"",
     "postinstall": "yarn check:node",
@@ -17,6 +18,9 @@
     "lint:js:without:prettier": "yarn lint:js -- --rule 'prettier/prettier: 0'",
     "lint:watch": "nodemon --watch src --exec \"yarn lint:without:prettier\"",
     "lint:without:prettier": "yarn lint:js:without:prettier",
+    "prepackage-functions": "rimraf functions",
+    "package-functions": "babel 'functionsES6' --out-dir 'functions' --presets=es2015 --copy-files --ignore 'node_modules'",
+    "postpackage-functions": "cd functions && yarn",
     "start": "neutrino start --use neutrino-preset-node",
     "start:built": "forever build/index.js",
     "start:debug": "yarn start -- --debug",
@@ -25,12 +29,16 @@
     "test:watch": "nodemon -w src -w test --exec 'yarn test'"
   },
   "dependencies": {
+    "firebase-functions": "^0.5.7",
+    "firebase-tools": "^3.9.1",
     "lodash": "^4.2.1"
   },
   "devDependencies": {
+    "babel-cli": "^6.24.1",
     "babel-eslint": "^7.2.3",
     "babel-plugin-transform-class-properties": "^6.23.0",
     "babel-plugin-transform-object-rest-spread": "^6.22.0",
+    "babel-preset-es2015": "^6.24.1",
     "babel-root-slash-import": "^1.1.0",
     "chai": "^4.0.1",
     "chai-moment": "^0.1.0",
@@ -48,6 +56,7 @@
     "neutrino-preset-node": "^5.9.1",
     "nodemon": "^1.8.1",
     "prettier": "^1.2.2",
+    "rimraf": "^2.6.1",
     "sort-package-json": "^1.6.1"
   },
   "engines": {
