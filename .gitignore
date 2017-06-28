@@ -1,3 +1,6 @@
+node_modules
+build
+
 # Logs
 logs
 *.log
@@ -33,4 +36,8 @@ node_modules
 # Optional REPL history
 .node_repl_history
 
+# misc
+.DS_Store
+.env
+npm-debug.log*
 dist

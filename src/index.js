@@ -1,7 +1,6 @@
-import _ from 'lodash'
+import * as functions from 'firebase-functions'
 
-while (true) {
-  if (_.random(0, 10, true) > 9.99999) {
-    console.log('Running1!')
-  }
-}
+export const onProjectQuery = functions.database.ref('/projectQueries').onWrite(event => {
+  const data = event.data.val()
+  console.log(data)
+})
