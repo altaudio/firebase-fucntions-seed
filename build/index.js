@@ -64,7 +64,7 @@ module.exports =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -76,21 +76,34 @@ module.exports =
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_firebase_functions__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_firebase_functions___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_firebase_functions__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_lodash__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_superagent__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_superagent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_superagent__);
 
 
-// A function triggered by onWrite event to /projectQueries directory
+
+
 const onProjectQuery = __WEBPACK_IMPORTED_MODULE_0_firebase_functions__["database"].ref('/projectQueries').onWrite(event => {
   const data = event.data.val();
-  console.log(data);
+  let newestTimestamp = 0;
+  __WEBPACK_IMPORTED_MODULE_1_lodash___default.a.mapKeys(data, (value, key) => {
+    if (key > newestTimestamp) {
+      newestTimestamp = key;
+    }
+  });
+
+  const newMessage = data[newestTimestamp];
+
+  __WEBPACK_IMPORTED_MODULE_2_superagent___default.a.post('https://slack.com/api/chat.postMessage').type('form').send({ token: 'xoxp-12518494951-128887104496-193423764374-aa5823c692e4657ceba1d18b13c27656' }).send({ channel: 'C5NJ698US' }).send({ text: `New Message from ${newMessage.userName} - ${newMessage.userEmail}: \n${newMessage.userMessage}` }).end(function (error, response) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log(response);
+    }
+  });
 });
 /* harmony export (immutable) */ __webpack_exports__["onProjectQuery"] = onProjectQuery;
-
-
-// A HTTP triggered function
-const logRequest = __WEBPACK_IMPORTED_MODULE_0_firebase_functions__["https"].onRequest(request => {
-  console.log(request);
-});
-/* harmony export (immutable) */ __webpack_exports__["logRequest"] = logRequest;
 
 
 /***/ }),
@@ -103,6 +116,20 @@ module.exports = require("firebase-functions");
 /***/ }),
 
 /***/ 1:
+/***/ (function(module, exports) {
+
+module.exports = require("lodash");
+
+/***/ }),
+
+/***/ 2:
+/***/ (function(module, exports) {
+
+module.exports = require("superagent");
+
+/***/ }),
+
+/***/ 3:
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__("./src/index.js");
