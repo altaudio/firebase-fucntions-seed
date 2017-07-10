@@ -1,24 +1,10 @@
 ## Getting started
 
-First run: `yarn install`
+Install Node Version 8+: nvm install node
+Install NPM: `npm install`
 
 Then run:
 
-* Run `yarn start` to run the app
-* Run `yarn start:debug` to debug the app in chrome debugger
+* Run `nvm exec 6.9.1 npm start` to run HTTP triggered functions locally (other function types coming soon)
+* Run `npm run deploy` to deploy your functions to firebase
 
-### Debugging
-
-Run `yarn start:debug` and then open the link provided to you to debug. 
-
-If your process doesn't run for long (It's not a web server or something). Then the debugger won't attach before the program finishes!
-
-`yarn start:debug -- --debug-brk` <- pauses the program on the first line so you can attach with plenty of time.
-
-At this point you'll notice your files aren't in the debugger, so you still can't debug.
-
-You can fix this using `debugger;` in your code:
-
-Add a `debugger;` line in your code somewhere. 
-
-Now debug again. When you press play, you'll go to that `debugger` line you set. Everything works fine from there. 
